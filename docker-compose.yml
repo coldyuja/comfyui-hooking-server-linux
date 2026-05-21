@@ -1,0 +1,31 @@
+services:
+  comfyui-hooking-server:
+    build: .
+    container_name: comfyui-hooking-server
+    restart: unless-stopped
+    ports:
+      - "8189:8189"
+    environment:
+      NO_BROWSER: "1"
+      # Use host.docker.internal when ComfyUI runs on the host machine.
+      # On Linux, extra_hosts below maps it to the Docker host gateway.
+      REAL_COMFY_HOST: "${REAL_COMFY_HOST:-host.docker.internal}"
+      REAL_COMFY_PORT: "${REAL_COMFY_PORT:-8188}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./config.json:/app/config.json
+      - ./workflow:/app/workflow
+      - ./current_work:/app/current_work
+      - ./workflow_backup:/app/workflow_backup
+      - ./workflow_backup_static:/app/workflow_backup_static
+      - ./logs:/app/logs
+      - ./mode_workflow:/app/mode_workflow
+      - ./current_mode_workflow:/app/current_mode_workflow
+      - ./asset_data:/app/asset_data
+      - ./asset:/app/asset
+      - ./auto_complete:/app/auto_complete
+      - ./pose_data:/app/pose_data
+      - ./chain_presets:/app/chain_presets
+      - ./key:/app/key
+      - ./customprompt:/app/customprompt
